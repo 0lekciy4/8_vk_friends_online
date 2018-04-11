@@ -1,8 +1,21 @@
 # Watcher of Friends Online
 This script prints in the terminal a list of your friends online in vk.
 Before the first start, you must get **"APP_ID"** . To get **"APP_ID"**,
-you need to register your
-application at **https://vk.com/dev**
+you need to register your application at **https://vk.com/dev**.
+After receiving the **"APP_ID"**, you must open the code and change
+the **"APP_ID"**.
+
+```bash
+. . .
+
+import vk
+
+APP_ID = 0 # Change APP_ID
+
+
+def get_user_login():
+. . .
+```
 
 # Example run
 Open the terminal, go to the directory where the file is located

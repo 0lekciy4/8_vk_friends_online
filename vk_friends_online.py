@@ -2,10 +2,7 @@ from getpass import getpass
 
 import vk
 
-APP_ID = None
-if not APP_ID:
-    APP_ID = int(input('please enter APP_ID, or change variable APP_ID'
-                       '\nin \'vk_friends_online.py\': '))
+APP_ID = 0
 
 
 def get_user_login():
@@ -18,7 +15,7 @@ def get_user_password():
     return user_password
 
 
-def get_online_friends(login, password):
+def get_online_friends(login, password, v='5.73', lang='ru', timeout=10):
     try:
         session = vk.AuthSession(
             app_id=APP_ID,
@@ -26,10 +23,10 @@ def get_online_friends(login, password):
             user_password=password,
             scope='friends',
         )
-        api = vk.API(session, v='5.73', lang='ru', timeout=10)
+        api = vk.API(session, v=v, lang=lang, timeout=timeout)
         friends_online_ids = api.friends.getOnline()
-        friends_online_dict = (api.users.get(user_ids=friends_online_ids))
-        return friends_online_dict
+        friends_online = (api.users.get(user_ids=friends_online_ids))
+        return friends_online
     except vk.exceptions.VkAuthError:
         return None
 
@@ -40,7 +37,7 @@ def output_friends_to_console(friends_online):
         for friend in friends_online:
             print(friend['first_name'], friend['last_name'])
     else:
-        print('Incorrect password or login')
+        print('All your friends are offline')
 
 
 def main():
@@ -48,7 +45,10 @@ def main():
     password = get_user_password()
     if login and password:
         friends_online = get_online_friends(login, password)
-        output_friends_to_console(friends_online)
+        if friends_online is not None:
+            output_friends_to_console(friends_online)
+        else:
+            print('Incorrect password or login')
     else:
         print('Login and password must be non-empty')
 
